@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="WaveEdit.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WaveEdit"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded">
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Name="WaveFilePath" Grid.Row="0" Text="C:\Users\dev\Desktop\Whirlwind1.wav" />
+
+            <StackPanel  Grid.Row="1" Orientation="Horizontal" Background="LightGray">
+                <!-- tools -->
+                <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
+                    <TextBlock Text="SAMPLE RATE" FontSize="11" Foreground="DarkGray"/>
+                    <TextBlock Text="44100Hz" Foreground="LightGray" />
+                </StackPanel>
+                <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
+                    <TextBlock Text="FORMAT" FontSize="11" Foreground="DarkGray"/>
+                    <TextBlock Text="16-bit" Foreground="LightGray" />
+                </StackPanel>
+                <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
+                    <TextBlock Text="TEMPO" FontSize="11" Foreground="DarkGray"/>
+                    <TextBlock Text="100BPM" Foreground="LightGray" />
+                </StackPanel>
+                <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
+                    <TextBlock Text="FILENAME" FontSize="11" Foreground="DarkGray"/>
+                    <TextBlock Text="Whirlwind1.wav" Foreground="LightGray" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- edit surface -->
+            <canvas:CanvasControl Grid.Row="2"
+                                  Name="canvas"
+                                  ClearColor="White"
+                                  Draw="canvas_Draw"
+                                  PointerMoved="canvas_PointerMoved"
+                                  PointerPressed="canvas_PointerPressed"
+                                  PointerReleased="canvas_PointerReleased"
+                                  PointerWheelChanged="canvas_PointerWheelChanged"/>
+
+            <StackPanel  Grid.Row="3" Orientation="Horizontal" Background="LightGray">
+                <TextBlock>footer</TextBlock>
+                <!-- footer -->
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
