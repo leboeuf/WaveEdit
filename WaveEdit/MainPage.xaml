@@ -24,11 +24,11 @@
                 <!-- tools -->
                 <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
                     <TextBlock Text="SAMPLE RATE" FontSize="11" Foreground="DarkGray"/>
-                    <TextBlock Text="44100Hz" Foreground="LightGray" />
+                    <TextBlock Name="sampleRateTextBlock" Text="Unknown" Foreground="LightGray" />
                 </StackPanel>
                 <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
                     <TextBlock Text="FORMAT" FontSize="11" Foreground="DarkGray"/>
-                    <TextBlock Text="16-bit" Foreground="LightGray" />
+                    <TextBlock Name="formatTextBlock" Text="Unknown" Foreground="LightGray" />
                 </StackPanel>
                 <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
                     <TextBlock Text="TEMPO" FontSize="11" Foreground="DarkGray"/>
@@ -36,7 +36,7 @@
                 </StackPanel>
                 <StackPanel Background="LightSlateGray" Padding="0,0,30,0">
                     <TextBlock Text="FILENAME" FontSize="11" Foreground="DarkGray"/>
-                    <TextBlock Text="Whirlwind1.wav" Foreground="LightGray" />
+                    <TextBlock Name="filenameTextBlock" Text="No file loaded" Foreground="LightGray" />
                 </StackPanel>
             </StackPanel>
 

@@ -60,6 +60,8 @@ namespace WaveEdit
             }
 
             int channels = wav[22];
+            int sampleRate = wav[24] + wav[25] * 256;
+            int bitsPerSample = wav[34];
             int pos = 12;
 
             while (!(wav[pos] == 100 && wav[pos + 1] == 97 && wav[pos + 2] == 116 && wav[pos + 3] == 97))
@@ -77,6 +79,8 @@ namespace WaveEdit
             // Allocate memory (right will be null if only mono sound)
             var result = new WaveData
             {
+                BitsPerSample = bitsPerSample,
+                SampleRate = sampleRate,
                 LeftChannel = new double[samples],
                 RightChannel = channels == 2 ? new double[samples] : null
             };

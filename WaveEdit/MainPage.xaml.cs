@@ -32,7 +32,11 @@ namespace WaveEdit
             var file = await picker.PickSingleFileAsync();
             var filename = file.Name;
 
+            this.filenameTextBlock.Text = filename;
+
             this.Editor.WaveData = await WaveUtils.LoadWave(file);
+            this.sampleRateTextBlock.Text = $"{this.Editor.WaveData.SampleRate.ToString()} Hz";
+            this.formatTextBlock.Text = $"{this.Editor.WaveData.BitsPerSample.ToString()}-bit";
         }
         
         // https://stackoverflow.com/questions/39605118/how-to-draw-an-audio-waveform-to-a-bitmap
