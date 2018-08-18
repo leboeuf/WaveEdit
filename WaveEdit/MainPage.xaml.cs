@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas.Brushes;
+using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.IO;
@@ -44,17 +45,32 @@ namespace WaveEdit
         {
             if (Editor.WaveData.LeftChannel == null) return;
 
-            args.DrawingSession.Clear(sender.ClearColor);
+            const int FONT_SIZE = 14;
 
+            args.DrawingSession.Clear(sender.ClearColor);
+            args.DrawingSession.Antialiasing = Microsoft.Graphics.Canvas.CanvasAntialiasing.Aliased;
+            var textFormat = new CanvasTextFormat { FontSize = FONT_SIZE, Direction = CanvasTextDirection.TopToBottomThenLeftToRight };
+            var negTextFormat = new CanvasTextFormat { FontSize = FONT_SIZE, Direction = CanvasTextDirection.BottomToTopThenLeftToRight };
+
+            var scale = Editor.Scale;
             var size = Editor.WaveData.LeftChannel.Length;
             var height = sender.ActualHeight;
-            var width = sender.ActualWidth;
-            for (int x = 0; x < width; x++)
+            var width = sender.ActualWidth * scale;
+
+            float previousX = 0;
+            float previousY = (float)(height / 2);
+            for (int x = 0; x < width / scale; x++)
             {
                 int start = (int)(x * (size / width));
                 int end = (int)((x + 1) * (size / width));
                 if (end > size)
                     end = size;
+
+                if (start == end)
+                {
+                    // Blank pixel
+                    continue;
+                }
 
                 WaveUtils.averages(Editor.WaveData.LeftChannel, start, end, out double posAvg, out double negAvg);
 
@@ -62,6 +78,26 @@ namespace WaveEdit
                 float yMin = (float)(height - ((negAvg + 1) * .5f * height));
 
                 args.DrawingSession.DrawLine(x, yMax, x, yMin, Colors.Red);
+
+                if (posAvg > 0)
+                {
+                    args.DrawingSession.DrawText(posAvg.ToString(), x - FONT_SIZE / 2, yMin, Colors.Blue, textFormat);
+                    args.DrawingSession.DrawLine(previousX, previousY, x, yMax, Colors.Silver);
+                    previousY = yMax;
+                }
+                else if (negAvg < 0)
+                {
+                    args.DrawingSession.DrawText(negAvg.ToString(), x - FONT_SIZE / 2, yMax, Colors.Blue, negTextFormat);
+                    args.DrawingSession.DrawLine(previousX, previousY, x, yMin, Colors.Silver);
+                    previousY = yMin;
+                }
+                else
+                {
+                    args.DrawingSession.DrawText("0", x - FONT_SIZE / 2, yMin, Colors.Blue, textFormat);
+                    previousY = (float)(height / 2);
+                }
+
+                previousX = x;
             }
 
             // Selection
@@ -114,7 +150,15 @@ namespace WaveEdit
 
         private void canvas_PointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            // TODO: zoom
+            const float MIN_SCALE = 1;
+            const float MAX_SCALE = 1000;
+
+            var newScale = this.Editor.Scale + e.GetCurrentPoint(null).Properties.MouseWheelDelta * .01f;
+
+            // Clamp between MIN_SCALE and MAX_SCALE
+            newScale = (newScale < MIN_SCALE) ? MIN_SCALE : (newScale > MAX_SCALE) ? MAX_SCALE : newScale;
+            this.Editor.Scale = newScale;
+
             canvas.Invalidate();
         }
     }
